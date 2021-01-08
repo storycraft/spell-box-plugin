@@ -1,0 +1,7 @@
+name: Spellbox
+prefix: spellbox
+version: 1.0.0
+main: sh.pancake.spellbox.SpellboxPlugin
+author: storycraft
+load: STARTUP
+api-version: 1.14

@@ -1,0 +1,32 @@
+/*
+ * Created on Mon Jan 04 2021
+ *
+ * Copyright (c) storycraft. Licensed under the MIT Licence.
+ */
+
+plugins {
+    id 'java'
+}
+
+//Force to use utf-8
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+sourceCompatibility = "1.8";
+targetCompatibility = "1.8";
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compileOnly files('../server/server.jar')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+     }
+}
