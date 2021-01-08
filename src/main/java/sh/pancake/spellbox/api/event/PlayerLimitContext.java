@@ -11,11 +11,11 @@ import org.bukkit.event.player.PlayerEvent;
 
 public class PlayerLimitContext<T extends PlayerEvent> implements ILimitedContext<T> {
 
-    private IEventContext<T> innerContext;
+    private IEventContext<T> context;
     private Player player;
 
     public PlayerLimitContext(IEventContext<T> context, Player player) {
-        this.innerContext = context;
+        this.context = context;
         this.player = player;
     }
 
@@ -24,7 +24,7 @@ public class PlayerLimitContext<T extends PlayerEvent> implements ILimitedContex
     }
 
     public IEventContext<T> getContext() {
-        return innerContext;
+        return context;
     }
 
     @Override

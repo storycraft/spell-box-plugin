@@ -11,11 +11,11 @@ import org.bukkit.event.entity.EntityEvent;
 
 public class EntityLimitContext<T extends EntityEvent> implements ILimitedContext<T> {
 
-    private IEventContext<T> innerContext;
+    private IEventContext<T> context;
     private Entity entity;
 
     public EntityLimitContext(IEventContext<T> context, Entity entity) {
-        this.innerContext = context;
+        this.context = context;
         this.entity = entity;
     }
     
@@ -23,14 +23,9 @@ public class EntityLimitContext<T extends EntityEvent> implements ILimitedContex
         return entity;
     }
 
-    public IEventContext<T> getInnerContext() {
-        return innerContext;
-    }
-
     @Override
     public IEventContext<T> getContext() {
-        // TODO Auto-generated method stub
-        return null;
+        return context;
     }
 
     @Override
