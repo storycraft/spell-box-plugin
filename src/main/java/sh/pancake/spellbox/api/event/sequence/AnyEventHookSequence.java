@@ -31,7 +31,7 @@ public class AnyEventHookSequence implements ISequence {
         EventContextListener listener = new EventContextListener(plugin);
         
         for (IEventContext<? extends Event> context : contextList) {
-            listener.bindContext(new FilteredContext<>(context, (event, resolver) -> {
+            listener.bindContext(new FilteredContext<>((event, resolver) -> {
                 resolver.on(event);
                 
                 if (cancelContext != null) cancelContext.resetCancelHandler();
@@ -39,7 +39,7 @@ public class AnyEventHookSequence implements ISequence {
                 listener.unbindAll();
     
                 if (callback != null) callback.onEnd(false);
-            }));
+            }, context));
         }
 
         if (cancelContext != null) {

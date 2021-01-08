@@ -11,7 +11,7 @@ public class FilteredContext<T> implements IEventContext<T> {
     private IEventContext<T> context;
     private IEventResolver<T> resolver;
 
-    public FilteredContext(IEventContext<T> context, IEventFilter<T> filter) {
+    public FilteredContext(IEventFilter<T> filter, IEventContext<T> context) {
         this.context = context;
         this.resolver = (event) -> {
             filter.filter(event, this.context.getResolver());

@@ -58,7 +58,7 @@ public class LeapingSkill<T extends IEntityTarget> implements ISkill<T> {
                 )
             ),
             new EventHookSequence(
-                new FilteredContext<>(new LeapEventContext(true), new EntityLimitFilter<>(user.getEntity()))
+                new FilteredContext<>(new EntityLimitFilter<>(user.getEntity()), new LeapEventContext(true))
             ),
             new SpellSequence<>(user, damageSpell)
         );
