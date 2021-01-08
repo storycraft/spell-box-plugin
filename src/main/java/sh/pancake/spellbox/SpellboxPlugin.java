@@ -4,8 +4,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import sh.pancake.spellbox.api.event.EventContextListener;
 import sh.pancake.spellbox.api.sequence.CancelContext;
-import sh.pancake.spellbox.api.sequence.event.ClickEventContext;
-import sh.pancake.spellbox.api.sequence.event.ClickEventContext.ClickType;
+import sh.pancake.spellbox.api.event.ClickEventContext;
+import sh.pancake.spellbox.api.event.ClickEventContext.ClickType;
 import sh.pancake.spellbox.skill.ISkill;
 import sh.pancake.spellbox.skill.LeapingSkill;
 import sh.pancake.spellbox.target.EntityTarget;

@@ -1,11 +1,8 @@
-package sh.pancake.spellbox.api.sequence.event;
+package sh.pancake.spellbox.api.event;
 
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import sh.pancake.spellbox.api.event.EventContext;
-import sh.pancake.spellbox.api.event.ICancellableEventContext;
-import sh.pancake.spellbox.api.event.IEventContext;
 /*
  * Created on Thu Jan 07 2021
  *

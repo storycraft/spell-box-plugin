@@ -1,1 +1,1 @@
-# Spell plugin demo
+# Spellbox
