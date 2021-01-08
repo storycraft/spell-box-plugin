@@ -14,7 +14,7 @@ import sh.pancake.spellbox.api.sequence.ISequenceCallback;
  * Copyright (c) storycraft. Licensed under the MIT Licence.
  */
 
-public class ParallelSequence implements ISequence {
+public class BranchSequence implements ISequence {
 
     private ISequence sequence;
 
@@ -24,7 +24,7 @@ public class ParallelSequence implements ISequence {
     @Nullable
     private CancelContext cancelContext;
 
-    public ParallelSequence(ISequence sequence, @Nullable ISequenceCallback callback, @Nullable CancelContext cancelContext) {
+    public BranchSequence(ISequence sequence, @Nullable ISequenceCallback callback, @Nullable CancelContext cancelContext) {
         this.sequence = sequence;
         this.callback = callback;
         this.cancelContext = cancelContext;

@@ -9,18 +9,19 @@ package sh.pancake.spellbox.api.event;
 public class EventContext<T> implements IEventContext<T> {
 
     private Class<T> eventClass;
-    private IEventHookFunc<T> hook;
+    private IEventResolver<? super T> resolver;
 
-    public EventContext(Class<T> eventClass, IEventHookFunc<T> hook) {
+    public EventContext(Class<T> eventClass, IEventResolver<? super T> resolver) {
         this.eventClass = eventClass;
-        this.hook = hook;
+        this.resolver = resolver;
     }
 
     public Class<T> getEventClass() {
         return eventClass;
     }
-
-    public IEventHookFunc<T> getHook() {
-        return hook;
+    
+    public IEventResolver<? super T> getResolver() {
+        return resolver;
     }
+    
 }

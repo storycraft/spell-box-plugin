@@ -1,11 +1,14 @@
 package sh.pancake.spellbox;
 
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import sh.pancake.spellbox.api.event.EventContextListener;
+import sh.pancake.spellbox.api.event.FilteredContext;
 import sh.pancake.spellbox.api.sequence.CancelContext;
-import sh.pancake.spellbox.api.event.ClickEventContext;
-import sh.pancake.spellbox.api.event.ClickEventContext.ClickType;
+import sh.pancake.spellbox.api.event.ClickEventFilter;
+import sh.pancake.spellbox.api.event.EventContext;
+import sh.pancake.spellbox.api.event.ClickEventFilter.ClickType;
 import sh.pancake.spellbox.skill.ISkill;
 import sh.pancake.spellbox.skill.LeapingSkill;
 import sh.pancake.spellbox.target.EntityTarget;
@@ -28,11 +31,15 @@ public class SpellboxPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        new EventContextListener<>(new ClickEventContext(ClickType.RIGHT))
-        .bind(this, (event, plugin, bind) -> {
-            CancelContext cancelContext = new CancelContext();
-            leapingSkill.use(new EntityTarget(event.getPlayer())).resolve(this, cancelContext);
-        });
+        new EventContextListener(this)
+        .bindContext(
+            new FilteredContext<>(
+                new EventContext<>(PlayerInteractEvent.class, (event) -> {
+                    leapingSkill.use(new EntityTarget(event.getPlayer())).resolve(this);
+                }),
+                new ClickEventFilter(ClickType.RIGHT)
+            )
+        );
     }
 
 }

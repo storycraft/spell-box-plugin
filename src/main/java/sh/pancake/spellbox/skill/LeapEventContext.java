@@ -3,8 +3,6 @@ package sh.pancake.spellbox.skill;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import sh.pancake.spellbox.api.event.EventContext;
-import sh.pancake.spellbox.api.event.ICancellableEventContext;
 import sh.pancake.spellbox.api.event.IEventContext;
 
 /*
@@ -13,38 +11,32 @@ import sh.pancake.spellbox.api.event.IEventContext;
  * Copyright (c) storycraft. Licensed under the MIT Licence.
  */
 
-public class LeapEventContext implements ICancellableEventContext<EntityDamageEvent> {
+public class LeapEventContext implements IEventContext<EntityDamageEvent> {
 
-    private boolean cancelled;
+    private boolean fallDamage;
 
-    private EventContext<EntityDamageEvent> context;
-
-    public LeapEventContext(boolean cancelled) {
-        this.cancelled = cancelled;
-        this.context = new EventContext<>(EntityDamageEvent.class, this::onEvent);
-    }
-
-    @Override
-    public IEventContext<EntityDamageEvent> getContext() {
-        return context;
+    public LeapEventContext(boolean fallDamage) {
+        this.fallDamage = fallDamage;
     }
     
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
+    public boolean haveFallDamage() {
+        return fallDamage;
     }
 
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
-    }
-
-    protected void onEvent(EntityDamageEvent e, Runnable resolve) {
+    protected void onEvent(EntityDamageEvent e) {
         if (e.getCause() != DamageCause.FALL) return;
 
-        e.setCancelled(cancelled);
+        e.setCancelled(fallDamage);
+    }
 
-        resolve.run();
+    @Override
+    public Class<EntityDamageEvent> getEventClass() {
+        return EntityDamageEvent.class;
+    }
+
+    @Override
+    public IEventResolver<? super EntityDamageEvent> getResolver() {
+        return this::onEvent;
     }
 
 }

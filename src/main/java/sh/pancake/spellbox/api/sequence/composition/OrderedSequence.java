@@ -13,11 +13,11 @@ import sh.pancake.spellbox.api.sequence.ISequence;
 import sh.pancake.spellbox.api.sequence.ISequenceCallback;
 import sh.pancake.spellbox.api.sequence.SequenceQueued;
 
-public class ComposedSequence implements ISequence {
+public class OrderedSequence implements ISequence {
 
     private ISequence[] sequences;
 
-    public ComposedSequence(ISequence... sequences) {
+    public OrderedSequence(ISequence... sequences) {
         this.sequences = sequences;
     }
 

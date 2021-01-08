@@ -1,9 +1,10 @@
 package sh.pancake.spellbox.skill;
 
-import sh.pancake.spellbox.api.event.EntityLimitContext;
+import sh.pancake.spellbox.api.event.EntityLimitFilter;
+import sh.pancake.spellbox.api.event.FilteredContext;
 import sh.pancake.spellbox.api.sequence.ISequence;
-import sh.pancake.spellbox.api.sequence.composition.ComposedSequence;
-import sh.pancake.spellbox.api.sequence.event.EventHookSequence;
+import sh.pancake.spellbox.api.sequence.composition.OrderedSequence;
+import sh.pancake.spellbox.api.event.sequence.EventHookSequence;
 import sh.pancake.spellbox.target.IEntityTarget;
 import sh.pancake.spellbox.spell.ISpell;
 import sh.pancake.spellbox.spell.LeapSpell;
@@ -46,7 +47,7 @@ public class LeapingSkill<T extends IEntityTarget> implements ISkill<T> {
 
     @Override
     public ISequence use(T user) {
-        return new ComposedSequence(
+        return new OrderedSequence(
             new SpellSequence<>(
                 user,
                 new LeapSpell(
@@ -56,8 +57,8 @@ public class LeapingSkill<T extends IEntityTarget> implements ISkill<T> {
                     .setY(power)
                 )
             ),
-            new EventHookSequence<>(
-                new EntityLimitContext<>(new LeapEventContext(true), user.getEntity())
+            new EventHookSequence(
+                new FilteredContext<>(new LeapEventContext(true), new EntityLimitFilter<>(user.getEntity()))
             ),
             new SpellSequence<>(user, damageSpell)
         );

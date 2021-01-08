@@ -1,9 +1,22 @@
 package sh.pancake.spellbox.api.event;
 
-public interface IEventContext<T> {
-    
-    Class<T> getEventClass();
+/*
+ * Created on Sat Jan 09 2021
+ *
+ * Copyright (c) storycraft. Licensed under the MIT Licence.
+ */
 
-    IEventHookFunc<T> getHook();
+public interface IEventContext<T> {
+
+    Class<T> getEventClass();
+    
+    IEventResolver<? super T> getResolver();
+    
+    @FunctionalInterface
+    public static interface IEventResolver<T> {
+
+        void on(T event);
+        
+    }
 
 }

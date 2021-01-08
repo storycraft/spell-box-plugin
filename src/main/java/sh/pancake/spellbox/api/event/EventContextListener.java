@@ -1,7 +1,5 @@
 package sh.pancake.spellbox.api.event;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -14,72 +12,36 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Copyright (c) storycraft. Licensed under the MIT Licence.
  */
 
-public class EventContextListener<T extends Event> {
+public class EventContextListener implements IContextListener<Event> {
     
-    private IEventContext<T> listenerContext;
+    private JavaPlugin plugin;
+    private Listener listener;
 
-    public EventContextListener(IEventContext<T> listenerContext) {
-        this.listenerContext = listenerContext;
-    }
-
-    public IEventContext<T> getListenerContext() {
-        return listenerContext;
-    }
-
-    public void setListenerContext(IEventContext<T> listenerContext) {
-        this.listenerContext = listenerContext;
+    public EventContextListener(JavaPlugin plugin) {
+        this.plugin = plugin;
+        this.listener = new Listener() {};
     }
 
     @SuppressWarnings("unchecked")
-    public Bind bind(JavaPlugin plugin, @Nullable IEventResolver<T> onEvent) {
-        Listener listener = new Listener() {};
-        Bind bind = new Bind(listener);
+    public <T extends Event>void bindContext(IEventContext<T> context) {
+        Class<T> eventClass = context.getEventClass();
         
         plugin.getServer().getPluginManager().registerEvent(
-            listenerContext.getEventClass(),
+            eventClass,
             listener,
             EventPriority.NORMAL,
             (Listener eventListener, Event event) -> {
-                if (listenerContext.getEventClass().equals(event.getClass()) && listener == eventListener) {
-                    listenerContext.getHook().onEvent(
-                        (T) event,
-                        () -> onEvent.on((T) event, plugin, bind)
-                    );
+                if (eventClass.equals(event.getClass()) && listener == eventListener) {
+                    context.getResolver().on((T) event);
                 }
             },
             plugin
         );
-
-        return bind;
     }
 
-    public Bind bind(JavaPlugin plugin) {
-        return bind(plugin, null);
-    }
-
-    public static class Bind {
-
-        private Listener listener;
-
-        private Bind(Listener listener) {
-            this.listener = listener;
-        }
-
-        public Listener getListener() {
-            return listener;
-        }
-
-        public void unbind() {
-            HandlerList.unregisterAll(listener);
-        }
-
-    }
-
-    @FunctionalInterface
-    public static interface IEventResolver<T> {
-
-        void on(T event, JavaPlugin plugin, Bind bind);
-        
+    @Override
+    public void unbindAll() {
+        HandlerList.unregisterAll(listener);
     }
 
 }

@@ -47,8 +47,4 @@ public class CancelContext {
         }
     }
 
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
-    }
-
 }
