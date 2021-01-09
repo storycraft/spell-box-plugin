@@ -11,7 +11,7 @@ import sh.pancake.spellbox.api.sequence.ISequence;
 import sh.pancake.spellbox.api.sequence.ISequenceCallback;
 import sh.pancake.spellbox.api.sequence.CancelContext;
 import sh.pancake.spellbox.api.event.EventContextListener;
-import sh.pancake.spellbox.api.event.FilteredContext;
+import sh.pancake.spellbox.api.event.filter.FilteredContext;
 import sh.pancake.spellbox.api.event.IEventContext;
 
 /*

@@ -4,10 +4,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import sh.pancake.spellbox.api.event.EventContextListener;
-import sh.pancake.spellbox.api.event.FilteredContext;
-import sh.pancake.spellbox.api.event.ClickEventFilter;
+import sh.pancake.spellbox.api.event.filter.FilteredContext;
+import sh.pancake.spellbox.api.event.filter.ClickEventFilter;
 import sh.pancake.spellbox.api.event.EventContext;
-import sh.pancake.spellbox.api.event.ClickEventFilter.ClickType;
+import sh.pancake.spellbox.api.event.filter.ClickEventFilter.ClickType;
 import sh.pancake.spellbox.skill.ISkill;
 import sh.pancake.spellbox.skill.LeapingSkill;
 import sh.pancake.spellbox.target.EntityTarget;

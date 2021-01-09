@@ -1,7 +1,7 @@
 package sh.pancake.spellbox.skill;
 
-import sh.pancake.spellbox.api.event.EntityLimitFilter;
-import sh.pancake.spellbox.api.event.FilteredContext;
+import sh.pancake.spellbox.api.event.filter.EntityLimitFilter;
+import sh.pancake.spellbox.api.event.filter.FilteredContext;
 import sh.pancake.spellbox.api.sequence.ISequence;
 import sh.pancake.spellbox.api.sequence.composition.OrderedSequence;
 import sh.pancake.spellbox.api.event.sequence.EventHookSequence;

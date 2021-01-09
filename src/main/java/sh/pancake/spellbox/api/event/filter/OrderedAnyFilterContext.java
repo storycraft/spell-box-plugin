@@ -1,6 +1,8 @@
-package sh.pancake.spellbox.api.event;
+package sh.pancake.spellbox.api.event.filter;
 
 import java.util.Iterator;
+
+import sh.pancake.spellbox.api.event.IEventContext;
 
 /*
  * Created on Sat Jan 09 2021
@@ -8,12 +10,12 @@ import java.util.Iterator;
  * Copyright (c) storycraft. Licensed under the MIT Licence.
  */
 
-public class OrderedFilterContext<T> implements IEventContext<T> {
-    
+public class OrderedAnyFilterContext<T> implements IEventContext<T> {
+
     private IEventContext<T> context;
     private Iterable<IEventFilter<T>> filterIterable;
 
-    public OrderedFilterContext(Iterable<IEventFilter<T>> filterIterable, IEventContext<T> context) {
+    public OrderedAnyFilterContext(Iterable<IEventFilter<T>> filterIterable, IEventContext<T> context) {
         this.context = context;
         this.filterIterable = filterIterable;
     }
@@ -33,22 +35,28 @@ public class OrderedFilterContext<T> implements IEventContext<T> {
         private Iterator<IEventFilter<T>> iterator;
         private IEventResolver<? super T> resolver;
 
+        private boolean resolved;
+
         public Resolver(Iterator<IEventFilter<T>> iterator, IEventResolver<? super T> resolver) {
             this.iterator = iterator;
             this.resolver = resolver;
+            this.resolved = false;
         }
 
         @Override
         public void on(T event) {
-            if (iterator.hasNext()) {
+            while (!resolved && iterator.hasNext()) {
                 IEventFilter<T> next = iterator.next();
     
-                next.filter(event, this::on);
-            } else {
-                resolver.on(event);
+                next.filter(event, this::onResolved);
             }
         }
 
-    }
+        private void onResolved(T event) {
+            this.resolved = true;
+            this.resolver.on(event);
+        }
 
+    }
+    
 }

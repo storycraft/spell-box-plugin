@@ -1,4 +1,4 @@
-package sh.pancake.spellbox.api.event;
+package sh.pancake.spellbox.api.event.filter;
 
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;

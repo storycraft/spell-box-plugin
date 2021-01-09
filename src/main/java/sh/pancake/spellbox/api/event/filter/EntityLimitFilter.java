@@ -1,4 +1,4 @@
-package sh.pancake.spellbox.api.event;
+package sh.pancake.spellbox.api.event.filter;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityEvent;

@@ -1,4 +1,6 @@
-package sh.pancake.spellbox.api.event;
+package sh.pancake.spellbox.api.event.filter;
+
+import sh.pancake.spellbox.api.event.IEventContext;
 
 /*
  * Created on Sat Jan 09 2021
