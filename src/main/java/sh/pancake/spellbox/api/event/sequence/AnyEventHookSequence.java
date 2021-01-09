@@ -1,6 +1,8 @@
 package sh.pancake.spellbox.api.event.sequence;
 
-import java.util.List;
+import java.util.Iterator;
+
+import javax.annotation.Nullable;
 
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,27 +22,15 @@ import sh.pancake.spellbox.api.event.IEventContext;
 
 public class AnyEventHookSequence implements ISequence {
 
-    private List<IEventContext<? extends Event>> contextList;
+    private Iterable<IEventContext<? extends Event>> contextIterable;
     
-    public AnyEventHookSequence(List<IEventContext<? extends Event>> contextList) {
-        this.contextList = contextList;
+    public AnyEventHookSequence(Iterable<IEventContext<? extends Event>> contextIterable) {
+        this.contextIterable = contextIterable;
     }
 
     @Override
     public void resolveChecked(JavaPlugin plugin, ISequenceCallback callback, CancelContext cancelContext) {
         EventContextListener listener = new EventContextListener(plugin);
-        
-        for (IEventContext<? extends Event> context : contextList) {
-            listener.bindContext(new FilteredContext<>((event, resolver) -> {
-                resolver.on(event);
-                
-                if (cancelContext != null) cancelContext.resetCancelHandler();
-    
-                listener.unbindAll();
-    
-                if (callback != null) callback.onEnd(false);
-            }, context));
-        }
 
         if (cancelContext != null) {
             cancelContext.updateCancelHandler(() -> {
@@ -48,6 +38,28 @@ public class AnyEventHookSequence implements ISequence {
                 if (callback != null) callback.onEnd(true);
             });
         }
+        
+        Iterator<IEventContext<? extends Event>> iterator = contextIterable.iterator();
+        while (iterator.hasNext()) {
+            IEventContext<? extends Event> context = iterator.next();
+            resolveContext(listener, context, callback, cancelContext);
+        }
+    }
+
+    protected <T extends Event>void resolveContext(
+        EventContextListener listener,
+        IEventContext<T> context,
+        @Nullable ISequenceCallback callback,
+        @Nullable CancelContext cancelContext
+        ) {
+            listener.bindContext(new FilteredContext<>((event, resolver) -> {
+                resolver.on(event);
+                
+                if (cancelContext != null) cancelContext.resetCancelHandler();
+    
+                listener.unbindAll();
+                if (callback != null) callback.onEnd(false);
+            }, context));
     }
     
 }

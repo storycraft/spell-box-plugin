@@ -1,45 +1,79 @@
 package sh.pancake.spellbox.api.sequence.composition;
 
-/*
- * Created on Thu Jan 07 2021
- *
- * Copyright (c) storycraft. Licensed under the MIT Licence.
- */
+import java.util.Arrays;
+import java.util.Iterator;
+
+import javax.annotation.Nullable;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import sh.pancake.spellbox.api.sequence.CancelContext;
 import sh.pancake.spellbox.api.sequence.ISequence;
 import sh.pancake.spellbox.api.sequence.ISequenceCallback;
-import sh.pancake.spellbox.api.sequence.SequenceQueued;
+
+/*
+ * Created on Thu Jan 07 2021
+ *
+ * Copyright (c) storycraft. Licensed under the MIT Licence.
+ */
 
 public class OrderedSequence implements ISequence {
 
-    private ISequence[] sequences;
+    private Iterable<ISequence> sequenceIterable;
+
+    public OrderedSequence(Iterable<ISequence> sequenceIterable) {
+        this.sequenceIterable = sequenceIterable;
+    }
 
     public OrderedSequence(ISequence... sequences) {
-        this.sequences = sequences;
+        this(Arrays.asList(sequences));
     }
 
     @Override
     public void resolveChecked(JavaPlugin plugin, ISequenceCallback callback, CancelContext cancelContext) {
-        int len = this.sequences.length;
+        Iterator<ISequence> iterator = sequenceIterable.iterator();
 
-        if (len < 1) {
+        if (!iterator.hasNext()) {
             if (callback != null) callback.onEnd(false);
             return;
         }
 
-        ISequenceCallback lastCallback = callback;
+        iterator.next().resolve(plugin, new Callback(plugin, iterator, callback, cancelContext), cancelContext);
+    }
 
-        for (int i = len - 1; i >= 0; i--) {
-            ISequence sequence = sequences[i];
+    public static class Callback implements ISequenceCallback {
 
-            lastCallback = new SequenceQueued(plugin, sequence, lastCallback);
+        private JavaPlugin plugin;
+
+        private Iterator<ISequence> iterator;
+        private ISequenceCallback callback;
+
+        @Nullable
+        private CancelContext cancelContext;
+
+        public Callback(JavaPlugin plugin, Iterator<ISequence> iterator, ISequenceCallback callback, @Nullable CancelContext cancelContext) {
+            this.plugin = plugin;
+            this.iterator = iterator;
+            this.callback = callback;
+            this.cancelContext = cancelContext;
         }
 
-        ISequence first = sequences[0];
-        first.resolve(plugin, lastCallback);
+        @Override
+        public void onEnd(boolean cancelled) {
+            if (cancelled) {
+                if (callback != null) callback.onEnd(true);
+                return;
+            }
+
+            if (iterator.hasNext()) {
+                ISequence next = iterator.next();
+
+                next.resolve(plugin, this, cancelContext);
+            } else {
+                if (callback != null) callback.onEnd(false);
+            }
+        }
+
     }
     
 }

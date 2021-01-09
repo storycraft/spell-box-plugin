@@ -4,8 +4,6 @@ import javax.annotation.Nullable;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-
-
 /*
  * Created on Thu Jan 07 2021
  *
