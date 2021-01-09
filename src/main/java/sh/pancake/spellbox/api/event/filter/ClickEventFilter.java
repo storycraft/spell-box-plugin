@@ -13,28 +13,17 @@ import sh.pancake.spellbox.api.event.IEventContext.IEventResolver;
 
 public class ClickEventFilter implements IEventFilter<PlayerInteractEvent> {
 
-    private ClickType clickType;
+    private Action action;
 
-    public ClickEventFilter(ClickType clickType) {
-        this.clickType = clickType;
+    public ClickEventFilter(Action action) {
+        this.action = action;
     }
 
     @Override
     public void filter(PlayerInteractEvent event, IEventResolver<? super PlayerInteractEvent> resolver) {
-        Action action = event.getAction();
-
-        if ((action == Action.LEFT_CLICK_BLOCK || action == Action.LEFT_CLICK_AIR)
-            && (clickType == ClickType.LEFT || clickType == ClickType.ANY)
-            || (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
-            && (clickType == ClickType.RIGHT || clickType == ClickType.ANY)) {
+        if (action == event.getAction()) {
             resolver.on(event);
         }
-    }
-
-    public static enum ClickType {
-
-        LEFT, RIGHT, ANY
-
     }
 
 }
